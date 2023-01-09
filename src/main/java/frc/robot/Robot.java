@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -79,9 +80,17 @@ public class Robot extends TimedRobot {
     }
   }
 
+  XboxController xboxController = new XboxController(Constants.OperatorConstants.kDriverControllerPort);
+
+  
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+//PHOTONVISION AUTO TRACKING
+
+
+
+  }
 
   @Override
   public void testInit() {

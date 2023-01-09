@@ -4,32 +4,38 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveSubsystem;
 
-/** An example command that uses an example subsystem. */
-public class ExampleCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+public class TurnApriltagCommand extends CommandBase {  
+  //Declare Variables 
+  private final DriveSubsystem m_DriveSubsystem;
+  private DoubleSupplier joyValue;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
+  /**Constructor 
+   * @param TestFalconSubsystem
+   * @param Joystick_DS 
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+  public TurnApriltagCommand( DriveSubsystem DriveSys, DoubleSupplier joyValue) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    m_DriveSubsystem = DriveSys;
+    addRequirements(m_DriveSubsystem);
+    this.joyValue = joyValue;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_.setPrecentOutput(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_FalconSys.setPrecentOutput(joyValue.getAsDouble());
+  }
 
   // Called once the command ends or is interrupted.
   @Override
