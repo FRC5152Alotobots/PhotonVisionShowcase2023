@@ -36,14 +36,21 @@ public class DriveSubsystem extends SubsystemBase {
   private final WPI_VictorSPX m_rearLeftMotor = new WPI_VictorSPX(DriveConstants.k_RearLeftMotorPort);
   private final WPI_VictorSPX m_frontRightMotor = new WPI_VictorSPX(DriveConstants.k_FrontRightMotorPort);
   private final WPI_VictorSPX m_rearRightMotor = new WPI_VictorSPX(DriveConstants.k_RearRightMotorPort);
+  
+ 
 //initialize Mecanum Drive 
   private final MecanumDrive m_MecanumDrive = new MecanumDrive(m_frontLeftMotor, m_rearLeftMotor, m_frontRightMotor, m_rearRightMotor);
 //*Declare Encoders  
   /** 
    *  The front-left-side drive encoder @param k[Encoder]Reversed boolean if that encoder reversed or not 
    * True = isReversed Flase = notReversed
+   *
   */
   /** Sets the front left drive MotorController to a voltage. */
+
+  public DriveSubsystem(){
+    m_frontLeftMotor.setInverted(true);
+  }
   public void setDriveMotorControllersVolts(MecanumDriveMotorVoltages volts) {
     m_frontLeftMotor.setVoltage(volts.frontLeftVoltage);
     m_rearLeftMotor.setVoltage(volts.rearLeftVoltage);
@@ -131,7 +138,37 @@ MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(
 
   @SuppressWarnings("ParameterName")
   public void MecanumDrive(double xSpeed, double ySpeed, double rot) {
-      m_MecanumDrive.driveCartesian(ySpeed, xSpeed, rot);
+      m_MecanumDrive.driveCartesian(xSpeed, ySpeed, rot);
+  }
+
+  public void resetEncoders() {
+    m_frontLeftEncoder.reset();
+    m_rearLeftEncoder.reset();
+    m_frontRightEncoder.reset();
+    m_rearRightEncoder.reset();
+  }
+
+  public void zeroHeading() {
+    m_gyro.reset();
+  }
+
+  
+    /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getHeading() {
+    return m_gyro.getRotation2d().getDegrees();
+  }
+
+  /**
+   * Returns the turn rate of the robot.
+   *
+   * @return The turn rate of the robot, in degrees per second
+   */
+  public double getTurnRate() {
+    return -m_gyro.getRate();
   }
 
 }
