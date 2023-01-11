@@ -22,6 +22,9 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.DriveConstants;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -125,7 +128,6 @@ MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(
 
   // Update the pose
   var m_pose = m_odometry.update(gyroAngle, wheelPositions);
-
   }
   /**
    * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
@@ -171,4 +173,21 @@ MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(
     return -m_gyro.getRate();
   }
 
+  /** Initializes Shuffleboard motor objects */
+  public void initShuffleboard(){
+    //plot mecananum drive to shuffleboard
+    ShuffleboardTab tab = Shuffleboard.getTab("Robot");
+    tab.addDouble("Front Left Speed", () -> m_frontLeftMotor.get())
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withPosition(0, 0);
+    tab.addDouble("Front Right Speed", () -> m_frontRightMotor.get())
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withPosition(1, 0);
+    tab.addDouble("Rear Left Speed", () -> m_rearLeftMotor.get())
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withPosition(0, 1);
+    tab.addDouble("Rear Right Speed", () -> m_rearRightMotor.get())
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withPosition(1, 1);
+  }
 }

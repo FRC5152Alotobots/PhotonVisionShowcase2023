@@ -5,10 +5,13 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.TeleopCommand;
 import frc.robot.commands.TurnApriltagCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -49,6 +52,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_driverController.rightTrigger().onTrue(new TeleopCommand(m_DriveSubsystem, 
+        () -> m_driverController.getLeftX(), 
+        () -> m_driverController.getLeftY(),
+        () -> m_driverController.getRightX()
+        ));
   }
 
   /**

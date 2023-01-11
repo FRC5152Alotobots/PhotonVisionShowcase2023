@@ -29,6 +29,15 @@ public final class Constants {
     public static final int k_RearRightMotorPort = 2;
     public static final int k_TestMotor = 6;
 
+    /** Drive PID  LINEAR */
+    public static final int k_driveLinKp = 0;
+    public static final int k_driveLinKi = 0;
+    public static final int k_driveLinKd = 0;
+    public static final int k_driveAngKp = 0;
+    public static final int k_driveAngKi = 0;
+    public static final int k_driveAngKd = 0;
+
+    /** Encoders */
     public static final int[] k_FrontLeftEncoderPorts = new int[] {0, 1};
     public static final int[] k_RearLeftEncoderPorts = new int[] {2, 3};
     public static final int[] k_FrontRightEncoderPorts = new int[] {4, 5};
@@ -44,41 +53,17 @@ public final class Constants {
     public static final double k_WheelBase = 0.7;
     // Distance between centers of front and back wheels on robot
 
-    public static final MecanumDriveKinematics k_DriveKinematics =
-        new MecanumDriveKinematics(
-            new Translation2d(k_WheelBase / 2, k_TrackWidth / 2),
-            new Translation2d(k_WheelBase / 2, -k_TrackWidth / 2),
-            new Translation2d(-k_WheelBase / 2, k_TrackWidth / 2),
-            new Translation2d(-k_WheelBase / 2, -k_TrackWidth / 2));
-
-    public static final int k_EncoderCPR = 1024;
-    public static final double k_WheelDiameterMeters = 0.15;
-    public static final double k_EncoderDistancePerPulse =
-        // Assumes the encoders are directly mounted on the wheel shafts
-        (k_WheelDiameterMeters * Math.PI) / (double) k_EncoderCPR;
-
-    // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
-    // These characterization values MUST be determined either experimentally or theoretically
-    // for *your* robot's drive.
-    // The SysId tool provides a convenient method for obtaining these values for your robot.
-    public static final SimpleMotorFeedforward k_Feedforward =
-        new SimpleMotorFeedforward(1, 0.8, 0.15);
-
-    // Example value only - as above, this must be tuned for your drive!
-    public static final double k_PFrontLeftVel = 0.5;
-    public static final double k_PRearLeftVel = 0.5;
-    public static final double k_PFrontRightVel = 0.5;
-    public static final double k_PRearRightVel = 0.5;
+  
   }
 
   public static class PhotonVisionConstants {
-    final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
-    final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+    public final static double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+    public final static double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
     // Angle between horizontal and the camera.
-    final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
 
     // How far from the target we want to be
-    final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+    public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
 
   }
 }
