@@ -5,13 +5,10 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.TeleopCommand;
-import frc.robot.commands.TurnApriltagCommand;
-import frc.robot.subsystems.DriveSubsystem;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Groups.Group_Drive.Subsys_Drive;
+import frc.robot.Groups.Group_Drive.Subsys_PID;
+// import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -22,7 +19,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
+  private final Subsys_Drive m_Subsys_MecanumDrive = new Subsys_Drive();
+  private final Subsys_PID m_Subsys_PID = new Subsys_PID();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -31,15 +30,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-
-    //default commands
-    m_DriveSubsystem.setDefaultCommand(
-      new TurnApriltagCommand(
-          m_DriveSubsystem, 
-          () -> m_driverController.getLeftX(), 
-          () -> m_driverController.getLeftY(),
-          () -> m_driverController.getRightX()
-      ));
   }
 
   /**
@@ -52,11 +42,13 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.rightTrigger().onTrue(new TeleopCommand(m_DriveSubsystem, 
-        () -> m_driverController.getLeftX(), 
-        () -> m_driverController.getLeftY(),
-        () -> m_driverController.getRightX()
-        ));
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    // new Trigger(m_exampleSubsystem::exampleCondition)
+        // .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
@@ -64,4 +56,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  // public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    // return Autos.exampleAuto(m_exampleSubsystem);
+  // }
 }

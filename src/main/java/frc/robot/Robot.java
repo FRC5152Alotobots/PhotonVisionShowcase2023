@@ -4,9 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -30,9 +28,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    PortForwarder.add(5800, "photonvision.local", 5800); //PORT FORWARD USB
-    PortForwarder.add(1181, "photonvision.local", 1181); //PORT FORWARD UsB
-    PortForwarder.add(1182, "photonvision.local", 1182); //PORT FORWARD UsB
   }
 
   /**
@@ -59,9 +54,15 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
-  @Override
-  public void autonomousInit() {
-  }
+  // @Override
+  // public void autonomousInit() {
+  //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+  //   // schedule the autonomous command (example)
+  //   if (m_autonomousCommand != null) {
+  //     m_autonomousCommand.schedule();
+  //   }
+  // }
 
   /** This function is called periodically during autonomous. */
   @Override
@@ -69,7 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-        // This makes sure that the autonomous stops running when
+    // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
@@ -77,15 +78,10 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
   }
-  
+
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-//PHOTONVISION AUTO TRACKING
-
-
-
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
