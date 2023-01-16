@@ -17,10 +17,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.PhotonVisionSubsytem;
 
-public class TurnApriltagCommand extends CommandBase {  
+public class NavigateToBestVisionTarget extends CommandBase {  
   //Declare Variables 
   private final DriveSubsystem m_DriveSubsystem;
+  private final PhotonVisionSubsytem m_PhotonVisionSubsytem;
   private DoubleSupplier xControllerStick;
   private DoubleSupplier yControllerStick;
   private DoubleSupplier zControllerStick;
@@ -33,10 +35,11 @@ public class TurnApriltagCommand extends CommandBase {
    * @param TestFalconSubsystem
    * @param Joystick_DS 
    */
-  public TurnApriltagCommand( DriveSubsystem DriveSys, DoubleSupplier xControllerStick, DoubleSupplier yControllerStick, DoubleSupplier zControllerStick) {
+  public NavigateToBestVisionTarget( DriveSubsystem DriveSys, PhotonVisionSubsytem PhotonVisionSys, DoubleSupplier xControllerStick, DoubleSupplier yControllerStick, DoubleSupplier zControllerStick) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_DriveSubsystem = DriveSys;
-    addRequirements(m_DriveSubsystem);
+    m_PhotonVisionSubsytem = PhotonVisionSys;
+    addRequirements(m_DriveSubsystem, m_PhotonVisionSubsytem);
     this.xControllerStick = xControllerStick;
     this.yControllerStick = yControllerStick;
     this.zControllerStick = zControllerStick;
@@ -57,9 +60,10 @@ public class TurnApriltagCommand extends CommandBase {
 
     /* FRONT CAMERA */
     var resultFront = cameraFront.getLatestResult();
+    /*
     if (resultFront.hasTargets()){
       //Get range to target
-      var range = m_DriveSubsystem.getRangeToTag(resultFront);
+      var range = m_PhotonVisionSubsytem.getRangeToTag(resultFront);
       forwardSpeed = -m_DriveSubsystem.controller.calculate(range, PhotonVisionConstants.GOAL_RANGE_METERS);
       //rotationSpeed = m_DriveSubsystem.turnController.calculate(result.getBestTarget().getYaw(), 0);
       strafeSpeed = -m_DriveSubsystem.controller.calculate(resultFront.getBestTarget().getYaw(), 0);
@@ -68,16 +72,19 @@ public class TurnApriltagCommand extends CommandBase {
       forwardSpeed = yControllerStick.getAsDouble();
       strafeSpeed = xControllerStick.getAsDouble();
     }
+    */
+    
     //Use values to drive robot
-    m_DriveSubsystem.MecanumDrive(strafeSpeed*0.5, forwardSpeed*0.4, 0);
+    m_DriveSubsystem.MecanumDrive(m_PhotonVisionSubsytem.getVisionStrafeSpeed(m_DriveSubsystem, resultFront)*0.5, m_PhotonVisionSubsytem.getVisionForwardSpeed(m_DriveSubsystem, resultFront)*0.4, 0);
     //SmartDashboard.putNumber("Rotation", rotationSpeed);
-    SmartDashboard.putNumber("Controller Z POS", zControllerStick.getAsDouble());
-  
-    /* REAR CAMERA */
+    //SmartDashboard.putNumber("Controller Z POS", zControllerStick.getAsDouble());
+
+  }
+    /* REAR CAMERA */ /* 
   var resultRear = cameraFront.getLatestResult();
   if (resultFront.hasTargets()){
     //Get range to target
-    var range = m_DriveSubsystem.getRangeToTag(resultRear);
+    var range = m_PhotonVisionSubsytem.getRangeToTag(resultRear);
     forwardSpeed = -m_DriveSubsystem.controller.calculate(range, PhotonVisionConstants.GOAL_RANGE_METERS);
     //rotationSpeed = m_DriveSubsystem.turnController.calculate(result.getBestTarget().getYaw(), 0);
     strafeSpeed = -m_DriveSubsystem.controller.calculate(resultRear.getBestTarget().getYaw(), 0);
@@ -91,12 +98,13 @@ public class TurnApriltagCommand extends CommandBase {
   //SmartDashboard.putNumber("Rotation", rotationSpeed);
   SmartDashboard.putNumber("Controller Z POS", zControllerStick.getAsDouble());
 }
+*/
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
+  // Returns true when the command should end.  
   @Override
   public boolean isFinished() {
     return false;

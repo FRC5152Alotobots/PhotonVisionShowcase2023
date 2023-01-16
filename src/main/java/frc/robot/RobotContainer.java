@@ -6,8 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleopCommand;
-import frc.robot.commands.TurnApriltagCommand;
+import frc.robot.commands.NavigateToBestVisionTarget;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.PhotonVisionSubsytem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -23,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
+  private final PhotonVisionSubsytem m_PhotonVisionSubsytem = new PhotonVisionSubsytem();
+  
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -33,13 +36,16 @@ public class RobotContainer {
     configureBindings();
 
     //default commands
+    /* 
     m_DriveSubsystem.setDefaultCommand(
       new TurnApriltagCommand(
-          m_DriveSubsystem, 
+          m_DriveSubsystem,
+          m_PhotonVisionSubsytem, 
           () -> m_driverController.getLeftX(), 
           () -> m_driverController.getLeftY(),
           () -> m_driverController.getRightX()
       ));
+    */
   }
 
   /**
@@ -52,12 +58,19 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.rightTrigger().onTrue(new TeleopCommand(m_DriveSubsystem, 
+    m_driverController.rightTrigger().onTrue(new TeleopCommand(
+      m_DriveSubsystem, 
         () -> m_driverController.getLeftX(), 
         () -> m_driverController.getLeftY(),
         () -> m_driverController.getRightX()
         ));
-   // m_driverController.rightTrigger().onFalse()
+    m_driverController.rightTrigger().onFalse(new NavigateToBestVisionTarget(
+      m_DriveSubsystem,
+      m_PhotonVisionSubsytem, 
+      () -> m_driverController.getLeftX(), 
+      () -> m_driverController.getLeftY(),
+      () -> m_driverController.getRightX()
+  ));
   }
 
   /**

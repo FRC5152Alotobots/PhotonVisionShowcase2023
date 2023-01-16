@@ -206,14 +206,4 @@ MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(
   public PIDController controller = new PIDController(DriveConstants.k_driveLinKp, DriveConstants.k_driveLinKi, DriveConstants.k_driveLinKd);
   public PIDController turnController = new PIDController(DriveConstants.k_driveAngKp, DriveConstants.k_driveAngKi, DriveConstants.k_driveAngKd);
 
-  /** VISION */
-  public double getRangeToTag(PhotonPipelineResult result){
-    double range =
-      PhotonUtils.calculateDistanceToTargetMeters(
-              PhotonVisionConstants.CAMERA_HEIGHT_METERS,
-              PhotonVisionConstants.TARGET_HEIGHT_METERS,
-              PhotonVisionConstants.CAMERA_PITCH_RADIANS,
-              Units.degreesToRadians(result.getBestTarget().getPitch()));
-    return range;
-  }
 }
