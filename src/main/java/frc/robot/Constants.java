@@ -29,13 +29,14 @@ public final class Constants {
     public static final int k_RearRightMotorPort = 2;
     public static final int k_TestMotor = 6;
 
+    //TODO: TUNE PID
     /** Drive PID  LINEAR */
-    public static final int k_driveLinKp = 0;
-    public static final int k_driveLinKi = 0;
-    public static final int k_driveLinKd = 0;
-    public static final int k_driveAngKp = 0;
-    public static final int k_driveAngKi = 0;
-    public static final int k_driveAngKd = 0;
+    public static final double k_driveLinKp = 0.1;
+    public static final double k_driveLinKi = 0;
+    public static final double k_driveLinKd = 0;
+    public static final double k_driveAngKp = 0.1;
+    public static final double k_driveAngKi = 0;
+    public static final double k_driveAngKd = 0;
 
     /** Encoders */
     public static final int[] k_FrontLeftEncoderPorts = new int[] {0, 1};
@@ -55,15 +56,14 @@ public final class Constants {
 
   
   }
-
   public static class PhotonVisionConstants {
-    public final static double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
-    public final static double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+    public final static double CAMERA_HEIGHT_METERS = Units.inchesToMeters(4);
+    public final static double TARGET_HEIGHT_METERS = Units.inchesToMeters(9.5);
     // Angle between horizontal and the camera.
     public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
 
     // How far from the target we want to be
-    public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+    public static final double GOAL_RANGE_METERS = Units.feetToMeters(1);
 
   }
 }

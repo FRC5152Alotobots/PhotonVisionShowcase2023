@@ -11,6 +11,8 @@ import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PhotonVisionConstants;
@@ -24,9 +26,8 @@ public class TurnApriltagCommand extends CommandBase {
   private DoubleSupplier zControllerStick;
   // Change this to match the name of your camera
 
-  PhotonCamera camera = new PhotonCamera("OV5647");
-  PIDController controller = new PIDController(DriveConstants.k_driveLinKp, DriveConstants.k_driveLinKi, DriveConstants.k_driveLinKd);
-  PIDController turnController = new PIDController(DriveConstants.k_driveAngKp, DriveConstants.k_driveAngKi, DriveConstants.k_driveAngKd);
+  PhotonCamera cameraFront = new PhotonCamera("OV5647");
+  PhotonCamera cameraRear = new PhotonCamera("OV5647");
   
   /**Constructor 
    * @param TestFalconSubsystem
@@ -44,7 +45,7 @@ public class TurnApriltagCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_DriveSubsystem.initShuffleboard();
+    //m_DriveSubsystem.initShuffleboard();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,25 +53,44 @@ public class TurnApriltagCommand extends CommandBase {
   public void execute() {
     double forwardSpeed;
     double rotationSpeed;
+    double strafeSpeed;
 
-    var result = camera.getLatestResult();
-    if (result.hasTargets()){
-      double range =
-      PhotonUtils.calculateDistanceToTargetMeters(
-              PhotonVisionConstants.CAMERA_HEIGHT_METERS,
-              PhotonVisionConstants.TARGET_HEIGHT_METERS,
-              PhotonVisionConstants.CAMERA_PITCH_RADIANS,
-              Units.degreesToRadians(result.getBestTarget().getPitch()));
-
-              forwardSpeed = -controller.calculate(range, PhotonVisionConstants.GOAL_RANGE_METERS);
-              rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);
+    /* FRONT CAMERA */
+    var resultFront = cameraFront.getLatestResult();
+    if (resultFront.hasTargets()){
+      //Get range to target
+      var range = m_DriveSubsystem.getRangeToTag(resultFront);
+      forwardSpeed = -m_DriveSubsystem.controller.calculate(range, PhotonVisionConstants.GOAL_RANGE_METERS);
+      //rotationSpeed = m_DriveSubsystem.turnController.calculate(result.getBestTarget().getYaw(), 0);
+      strafeSpeed = -m_DriveSubsystem.controller.calculate(resultFront.getBestTarget().getYaw(), 0);
     } else {
-      rotationSpeed = 0;
-      forwardSpeed = 0;
+      //rotationSpeed = 0;
+      forwardSpeed = yControllerStick.getAsDouble();
+      strafeSpeed = xControllerStick.getAsDouble();
     }
     //Use values to drive robot
-    m_DriveSubsystem.MecanumDrive(0, forwardSpeed, rotationSpeed);
+    m_DriveSubsystem.MecanumDrive(strafeSpeed*0.5, forwardSpeed*0.4, 0);
+    //SmartDashboard.putNumber("Rotation", rotationSpeed);
+    SmartDashboard.putNumber("Controller Z POS", zControllerStick.getAsDouble());
+  
+    /* REAR CAMERA */
+  var resultRear = cameraFront.getLatestResult();
+  if (resultFront.hasTargets()){
+    //Get range to target
+    var range = m_DriveSubsystem.getRangeToTag(resultRear);
+    forwardSpeed = -m_DriveSubsystem.controller.calculate(range, PhotonVisionConstants.GOAL_RANGE_METERS);
+    //rotationSpeed = m_DriveSubsystem.turnController.calculate(result.getBestTarget().getYaw(), 0);
+    strafeSpeed = -m_DriveSubsystem.controller.calculate(resultRear.getBestTarget().getYaw(), 0);
+  } else {
+    //rotationSpeed = 0;
+    forwardSpeed = yControllerStick.getAsDouble();
+    strafeSpeed = xControllerStick.getAsDouble();
   }
+  //Use values to drive robot
+  m_DriveSubsystem.MecanumDrive(strafeSpeed*0.5, forwardSpeed*0.4, 0);
+  //SmartDashboard.putNumber("Rotation", rotationSpeed);
+  SmartDashboard.putNumber("Controller Z POS", zControllerStick.getAsDouble());
+}
 
   // Called once the command ends or is interrupted.
   @Override

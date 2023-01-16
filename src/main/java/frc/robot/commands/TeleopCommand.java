@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -15,6 +16,7 @@ public class TeleopCommand extends CommandBase {
   private DoubleSupplier xControllerStick;
   private DoubleSupplier yControllerStick;
   private DoubleSupplier zControllerStick;
+  
   
   /**Constructor 
    * @param TestFalconSubsystem
@@ -32,14 +34,15 @@ public class TeleopCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_DriveSubsystem.initShuffleboard();
+    //m_DriveSubsystem.initShuffleboard();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_DriveSubsystem.MecanumDrive(xControllerStick.getAsDouble(), yControllerStick.getAsDouble(), zControllerStick.getAsDouble());
+    m_DriveSubsystem.MecanumDrive(-xControllerStick.getAsDouble(), -yControllerStick.getAsDouble(), -zControllerStick.getAsDouble());
   }
+
 
   // Called once the command ends or is interrupted.
   @Override

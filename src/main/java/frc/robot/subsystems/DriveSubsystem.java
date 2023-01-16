@@ -11,6 +11,7 @@
  */
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -26,6 +28,12 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.PhotonVisionConstants;
+
+import org.ejml.equation.Variable;
+import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -41,8 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final WPI_VictorSPX m_rearRightMotor = new WPI_VictorSPX(DriveConstants.k_RearRightMotorPort);
   
  
-//initialize Mecanum Drive 
-  private final MecanumDrive m_MecanumDrive = new MecanumDrive(m_frontLeftMotor, m_rearLeftMotor, m_frontRightMotor, m_rearRightMotor);
+
 //*Declare Encoders  
   /** 
    *  The front-left-side drive encoder @param k[Encoder]Reversed boolean if that encoder reversed or not 
@@ -54,6 +61,10 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem(){
     m_frontLeftMotor.setInverted(true);
   }
+
+  //initialize Mecanum Drive 
+  private final MecanumDrive m_MecanumDrive = new MecanumDrive(m_frontLeftMotor, m_rearLeftMotor, m_frontRightMotor, m_rearRightMotor);
+  
   public void setDriveMotorControllersVolts(MecanumDriveMotorVoltages volts) {
     m_frontLeftMotor.setVoltage(volts.frontLeftVoltage);
     m_rearLeftMotor.setVoltage(volts.rearLeftVoltage);
@@ -189,5 +200,20 @@ MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(
     tab.addDouble("Rear Right Speed", () -> m_rearRightMotor.get())
     .withWidget(BuiltInWidgets.kNumberBar)
     .withPosition(1, 1);
+  }
+
+  /** PID CONTROLLERS */
+  public PIDController controller = new PIDController(DriveConstants.k_driveLinKp, DriveConstants.k_driveLinKi, DriveConstants.k_driveLinKd);
+  public PIDController turnController = new PIDController(DriveConstants.k_driveAngKp, DriveConstants.k_driveAngKi, DriveConstants.k_driveAngKd);
+
+  /** VISION */
+  public double getRangeToTag(PhotonPipelineResult result){
+    double range =
+      PhotonUtils.calculateDistanceToTargetMeters(
+              PhotonVisionConstants.CAMERA_HEIGHT_METERS,
+              PhotonVisionConstants.TARGET_HEIGHT_METERS,
+              PhotonVisionConstants.CAMERA_PITCH_RADIANS,
+              Units.degreesToRadians(result.getBestTarget().getPitch()));
+    return range;
   }
 }
