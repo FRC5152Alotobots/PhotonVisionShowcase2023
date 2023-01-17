@@ -36,16 +36,15 @@ public class RobotContainer {
     configureBindings();
 
     //default commands
-    /* 
+    
     m_DriveSubsystem.setDefaultCommand(
-      new TurnApriltagCommand(
-          m_DriveSubsystem,
-          m_PhotonVisionSubsytem, 
+      new TeleopCommand(
+          m_DriveSubsystem, 
           () -> m_driverController.getLeftX(), 
           () -> m_driverController.getLeftY(),
           () -> m_driverController.getRightX()
       ));
-    */
+    
   }
 
   /**
@@ -58,19 +57,17 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.rightTrigger().onTrue(new TeleopCommand(
+    /*m_driverController.rightTrigger().onTrue(new TeleopCommand(
       m_DriveSubsystem, 
         () -> m_driverController.getLeftX(), 
         () -> m_driverController.getLeftY(),
         () -> m_driverController.getRightX()
-        ));
+        ));*/
+        /*
     m_driverController.rightTrigger().onFalse(new NavigateToBestVisionTarget(
       m_DriveSubsystem,
-      m_PhotonVisionSubsytem, 
-      () -> m_driverController.getLeftX(), 
-      () -> m_driverController.getLeftY(),
-      () -> m_driverController.getRightX()
-  ));
+      m_PhotonVisionSubsytem
+  ));*/
   }
 
   /**

@@ -23,9 +23,6 @@ public class NavigateToBestVisionTarget extends CommandBase {
   //Declare Variables 
   private final DriveSubsystem m_DriveSubsystem;
   private final PhotonVisionSubsytem m_PhotonVisionSubsytem;
-  private DoubleSupplier xControllerStick;
-  private DoubleSupplier yControllerStick;
-  private DoubleSupplier zControllerStick;
   // Change this to match the name of your camera
 
   PhotonCamera cameraFront = new PhotonCamera("OV5647");
@@ -35,14 +32,11 @@ public class NavigateToBestVisionTarget extends CommandBase {
    * @param TestFalconSubsystem
    * @param Joystick_DS 
    */
-  public NavigateToBestVisionTarget( DriveSubsystem DriveSys, PhotonVisionSubsytem PhotonVisionSys, DoubleSupplier xControllerStick, DoubleSupplier yControllerStick, DoubleSupplier zControllerStick) {
+  public NavigateToBestVisionTarget( DriveSubsystem DriveSys, PhotonVisionSubsytem PhotonVisionSys) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_DriveSubsystem = DriveSys;
     m_PhotonVisionSubsytem = PhotonVisionSys;
     addRequirements(m_DriveSubsystem, m_PhotonVisionSubsytem);
-    this.xControllerStick = xControllerStick;
-    this.yControllerStick = yControllerStick;
-    this.zControllerStick = zControllerStick;
   }
 
   // Called when the command is initially scheduled.
@@ -54,9 +48,7 @@ public class NavigateToBestVisionTarget extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double forwardSpeed;
-    double rotationSpeed;
-    double strafeSpeed;
+
 
     /* FRONT CAMERA */
     var resultFront = cameraFront.getLatestResult();
